@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.3//EN"
+       "http://struts.apache.org/dtds/struts-config_1_3.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="loginForm"
+			type="com.me.sdp.cart.ShoppingCart.form.LoginForm" />
+		<form-bean name="registerForm"
+			type="com.me.sdp.cart.ShoppingCart.form.RegisterForm" />
+		<form-bean name="productForm"
+			type="com.me.sdp.cart.ShoppingCart.form.ProductForm" />
+		<form-bean name="userForm"
+			type="com.me.sdp.cart.ShoppingCart.form.UserForm" />
+	</form-beans>
+	<global-forwards>
+		<forward name="login" path="/login.jsp" redirect="true" />
+		<forward name="register" path="/register.jsp" redirect="true" />
+		<forward name="success" path="/products.jsp" />
+		<forward name="viewWishlist"
+			path="user.do?method=viewWishlist" redirect="true" />
+		<forward name="wishlist" path="/WEB-INF/jsp/wishList.jsp" />
+		<forward name="viewCart"
+			path="user.do?method=viewCart" redirect="true" />
+		<forward name="cart" path="/WEB-INF/jsp/cart.jsp" />
+		<forward name="viewPurchase"
+			path="user.do?method=viewPurchase" redirect="true" />
+		<forward name="purchase" path="/WEB-INF/jsp/purchase.jsp" />
+		<forward name="viewOrders"
+			path="user.do?method=viewOrder" redirect="true" />
+		<forward name="orders" path="/WEB-INF/jsp/order.jsp" />
+		
+		
+		<forward name="admin" path="/WEB-INF/jsp/admin.jsp" />
+		<forward name="adminHome" path="/admin.do?method=home"
+			redirect="true" />
+		<forward name="addProduct" path="/WEB-INF/jsp/addProduct.jsp" />
+		<forward name="edit" path="/admin.do?method=edit"
+			redirect="true" />
+		<forward name="editProduct"
+			path="/WEB-INF/jsp/editProduct.jsp" />
+
+
+	</global-forwards>
+	<action-mappings>
+		<action path="/login" input="/login.jsp" name="loginForm"
+			scope="request" validate="true"
+			type="com.me.sdp.cart.ShoppingCart.action.LoginAction" />
+		<action path="/logout" scope="request"
+			type="com.me.sdp.cart.ShoppingCart.action.LogoutAction" />
+		<action path="/register" input="/register.jsp"
+			name="registerForm" scope="request"
+			type="com.me.sdp.cart.ShoppingCart.action.RegisterAction"
+			validate="true" />
+		<action path="/products" scope="request"
+			type="com.me.sdp.cart.ShoppingCart.action.ProductAction" />
+		<action path="/user" name="userForm" parameter="method"
+			scope="request" type="com.me.sdp.cart.ShoppingCart.action.UserAction"
+			input="/products.jsp" validate="true" />
+		<action path="/admin" name="productForm" parameter="method"
+			scope="request"
+			type="com.me.sdp.cart.ShoppingCart.action.AdminAction"
+			validate="true" input="/WEB-INF/jsp/addProduct.jsp" />
+
+	</action-mappings>
+	<message-resources
+		parameter="com.me.sdp.cart.ShoppingCart.properties.common" />
+</struts-config>
