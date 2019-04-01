@@ -4,9 +4,10 @@ package com.me.sdp.cart.ShoppingCart;
  *  Column Name and Table Name of  database table  <code>ProductOrder</code> is mapped
  * as constants in this util.</p> 
    * 
-  * Primary Key for this definition is  <br>
+  * Primary Keys for this definition are  <br>
   <ul>
   * <li> {@link #ORDER_ID}
+  * <li> {@link #PRODUCT_ID}
   * </ul>
  */
  
@@ -20,9 +21,9 @@ public final class PRODUCTORDER
      */
     public static final String TABLE = "ProductOrder" ;
     /**
-                            * This column is an Primary Key for this Table definition. <br>
+                            * This column is one of the Primary Key for this Table definition. <br>
                             * Data Type of this field is <code>INTEGER</code>. <br>
-                                          * This field is not nullable. <br>
+                                          * This field is nullable. <br>
                                 */
     public static final String ORDER_ID= "ORDER_ID" ;
 
@@ -32,17 +33,7 @@ public final class PRODUCTORDER
     public static final int ORDER_ID_IDX = 1 ;
 
     /**
-                            * Data Type of this field is <code>INTEGER</code>. <br>
-                                          * This field is nullable. <br>
-                                */
-    public static final String USER_ID= "USER_ID" ;
-
-    /*
-    * The index position of the column USER_ID in the table.
-    */
-    public static final int USER_ID_IDX = 2 ;
-
-    /**
+                            * This column is one of the Primary Key for this Table definition. <br>
                             * Data Type of this field is <code>INTEGER</code>. <br>
                                           * This field is nullable. <br>
                                 */
@@ -51,29 +42,18 @@ public final class PRODUCTORDER
     /*
     * The index position of the column PRODUCT_ID in the table.
     */
-    public static final int PRODUCT_ID_IDX = 3 ;
-
-    /**
-                            * Data Type of this field is <code>DATETIME</code>. <br>
-                                          * This field is nullable. <br>
-                                */
-    public static final String TIME_STAMP= "TIME_STAMP" ;
-
-    /*
-    * The index position of the column TIME_STAMP in the table.
-    */
-    public static final int TIME_STAMP_IDX = 4 ;
+    public static final int PRODUCT_ID_IDX = 2 ;
 
     /**
                             * Data Type of this field is <code>INTEGER</code>. <br>
                                           * This field is nullable. <br>
                                 */
-    public static final String ADDRESS_ID= "ADDRESS_ID" ;
+    public static final String PRODUCT_QUANTITY= "PRODUCT_QUANTITY" ;
 
     /*
-    * The index position of the column ADDRESS_ID in the table.
+    * The index position of the column PRODUCT_QUANTITY in the table.
     */
-    public static final int ADDRESS_ID_IDX = 5 ;
+    public static final int PRODUCT_QUANTITY_IDX = 3 ;
 
     /**
                             * Data Type of this field is <code>BOOLEAN</code>. <br>
@@ -85,6 +65,6 @@ public final class PRODUCTORDER
     /*
     * The index position of the column IS_CANCELLED in the table.
     */
-    public static final int IS_CANCELLED_IDX = 6 ;
+    public static final int IS_CANCELLED_IDX = 4 ;
 
 }
