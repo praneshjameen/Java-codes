@@ -19,7 +19,7 @@
 	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
 	crossorigin="anonymous">
 </head>
-<body>
+<body onload="activeTab('wListNav')">
 	<%@ include file="/WEB-INF/jspf/nav.jspf"%>
 	<logic:empty name="wishLists">
 		<div class="card" style="width: 50%; margin: auto;">
@@ -28,29 +28,31 @@
 			</div>
 		</div>
 	</logic:empty>
-	<div style="color: red;text-align:center;">
-				<html:errors />
-			</div>
 	<logic:iterate name="wishLists" id="wishList">
 		<bean:define id="productId" name="wishList" property="productId" />
 		<bean:define id="productQuantity" name="wishList"
 			property="productQuantity" />
+		<bean:define id="available" name="wishList" property="isAvailable" />
 		<div class="card" style="width: 60%; margin: 2%;">
 			<div class="card=body"
 				style="padding: 2%; font-size: large; font-weight: bold;">
 				<bean:write name="wishList" property="productName" />
 				<div style="float: right;">
 					<a class="btn btn-danger"
-						href="user.do?method=removeWishlist&id=${productId}">Remove</a>
-					<logic:equal name="productQuantity" value="0">
-						<a class="btn btn-secondary">Stock Out</a>
+						href="user.do?method=removeWishlist&id=${productId}&page=2">Remove</a>
+					<logic:equal name="available" value="false">
+						<a class="btn btn-secondary">Not
+							Available</a>
 					</logic:equal>
-					<logic:notEqual name="productQuantity" value="0">
-						<a href="user.do?method=addToCart&id=${productId}"
-							class="btn btn-primary">+ Cart</a>
-						<a href="user.do?method=buyNow&id=${productId}"
-							class="btn btn-success">Buy</a>
-					</logic:notEqual>
+					<logic:equal name="available" value="true">
+						<logic:equal name="productQuantity" value="0">
+							<a class="btn btn-secondary">Stock Out</a>
+						</logic:equal>
+						<logic:notEqual name="productQuantity" value="0">
+							<a href="user.do?method=buyNow&id=${productId}"
+								class="btn btn-success">Buy</a>
+						</logic:notEqual>
+					</logic:equal>
 				</div>
 			</div>
 		</div>

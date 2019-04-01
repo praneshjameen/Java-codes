@@ -20,7 +20,7 @@
 	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
 	crossorigin="anonymous">
 </head>
-<body>
+<body onload="activeTab('ordersNav')">
 	<%@ include file="/WEB-INF/jspf/nav.jspf"%>
 	<logic:empty name="orderLists">
 		<div class="card" style="width: 50%; margin: auto;">
@@ -31,18 +31,12 @@
 	</logic:empty>
 
 	<logic:iterate name="orderLists" id="orderItem">
-		<bean:define id="isCancelled" name="orderItem" property="isCancelled" />
 		<bean:define id="orderId" name="orderItem" property="orderId" />
-		<div class="card" style="width: 80%; margin: 2%;">
+
+		<div class="card" style="width: 60%; margin: 2%;">
 			<h4 class="card-header">
-				<bean:write name="orderItem" property="productName" />
-				<logic:equal name="isCancelled" value="false">
-					<a href="user.do?method=cancelItem&id=${orderId}"
-						class="btn btn-danger" style="float: right">Cancel</a>
-				</logic:equal>
-				<logic:equal name="isCancelled" value="true">
-					<a class="btn btn-secondary" style="float: right">Cancelled</a>
-				</logic:equal>
+				Order ID :
+				<bean:write name="orderId" />
 			</h4>
 			<div class="card-body" style="font-weight: bold;">
 
@@ -55,10 +49,65 @@
 					Order Time : <span style="font-weight: normal;"><bean:write
 							name="orderItem" property="timeStamp" /></span>
 				</p>
+				<logic:iterate id="product" name="orderItem" property="products">
+					<bean:define id="isCancelled" name="product" property="isCancelled" />
+					<bean:define id="quantity" name="product"
+						property="productQuantity" />
+					<bean:define id="productId" name="product" property="productId" />
+					<div class="card" style="width: 80%; margin: 2%;">
+						<h6 class="card-header">
+							<bean:write name="product" property="productName" />
+							<div style="float: right;">
+								<logic:notEqual name="quantity" value="0">
+									<a id="cancel${orderId}${productId}"
+										href="user.do?method=cancelItem&orderId=${orderId}&productId=${productId}&quantity=1"
+										class="btn btn-danger">Cancel(1)</a>
+								</logic:notEqual>
+								<logic:equal name="quantity" value="0">
+									<a class="btn btn-secondary">Cancelled</a>
+								</logic:equal>
+							</div>
+						</h6>
+						<div class="card-body">
+							<logic:notEqual name="quantity" value="0">
+							Quantity : <span style="font-weight: normal;" x>${quantity}</span>
+							<logic:equal name="isCancelled" value="true">
+							(Partially Cancelled)
+							</logic:equal>
+								<div class="form-inline form-group mb-2" style="float: right;">
+									<select onchange="quantityValue(${orderId},${productId})"
+										id="quantity${orderId}${productId}"
+										class=" form-control form-control-sm">
+										<%
+											for (int i = 1; i <= (Integer) quantity; i++) {
+										%>
+										<option><%=i%></option>
+										<%
+											}
+										%>
+									</select>
+								</div>
+							</logic:notEqual>
+							<logic:equal name="quantity" value="0">
+							You've cancelled the entire order
+							</logic:equal>
+						</div>
+					</div>
+				</logic:iterate>
 			</div>
 		</div>
 	</logic:iterate>
-
+	<script>
+	function quantityValue(id1,id2){
+		var id=id1+''+id2;
+		var i=$('#quantity'+id).val();
+		console.log(i);
+		$('#cancel'+id).text('Cancel('+i+')');
+		var href='user.do?method=cancelItem&orderId='+id1+'&productId='+id2+'&quantity='+i;
+		console.log(href);
+		$('#cancel'+id).attr('href',href);
+	}
+	</script>
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
 		crossorigin="anonymous"></script>

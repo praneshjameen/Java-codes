@@ -18,14 +18,28 @@ h3 {
 }
 </style>
 </head>
-<body>
+<body onload="activeTab('productsNav')">
 	<%@ include file="/WEB-INF/jspf/nav.jspf"%>
+	<logic:equal name="role" value="normal">
+
+		<logic:redirect page="/products.do"></logic:redirect>
+	</logic:equal>
+	<logic:equal name="role" value="admin">
+		<div class="card" style="width: 50%; margin: auto;">
+			<div class="card-body">
+				<h1 style="text-align: center;">
+					Hello <bean:write name="username"/> - ADMINISTRATOR
+				</h1>
+			</div>
+
+		</div>
+	</logic:equal>
 	<logic:iterate name="productList" id="product">
 		<bean:define id="productid" name="product" property="productId" />
 		<bean:define id="available" name="product" property="isAvailable" />
 		<html:form action="admin.do?method=updateProduct&id=${productid }">
 			<div class="card"
-				style="width: 250px; float: left; margin: 2%; height: 270px;">
+				style="width: 250px; float: left; margin: 2%; height: 275px;">
 				<h3 class="card-header">
 					<bean:write name="product" property="productName" />
 				</h3>

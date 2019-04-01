@@ -13,7 +13,7 @@
 	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
 	crossorigin="anonymous">
 </head>
-<body>
+<body onload="activeTab('registerNav')">
 	<%@ include file="/WEB-INF/jspf/nav.jspf"%>
 	<logic:notPresent name="role">
 		<div class="card" style="width: 50%; margin: auto;">

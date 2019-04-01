@@ -19,7 +19,7 @@
 	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
 	crossorigin="anonymous">
 </head>
-<body>
+<body">
 	<%@ include file="/WEB-INF/jspf/nav.jspf"%>
 	<logic:empty name="purchaseLists">
 		<div class="card" style="width: 50%; margin: auto;">
@@ -42,27 +42,31 @@
 					property="productQuantity" />
 				<bean:define id="productPrice" name="purchaseItems"
 					property="productPrice" />
-				<div class="card" style="width: 50%; margin: 2%;">
-					<h5 class="card-header">
-						<bean:write name="purchaseItems" property="productName" />
-						(&#8377;
-						<bean:write name="purchaseItems" property="productPrice" />
-						)
-					</h5>
-					<div class="card-body" style="padding: 2%; font-size: large;">
-						Quantity : <strong><bean:write name="purchaseItems"
-								property="productQuantity" /></strong>
+				<bean:define id="available" name="purchaseItems"
+					property="isAvailable" />
+				<logic:equal name="available" value="true">
+					<div class="card" style="width: 50%; margin: 2%;">
+						<h5 class="card-header">
+							<bean:write name="purchaseItems" property="productName" />
+							(&#8377;
+							<bean:write name="purchaseItems" property="productPrice" />
+							)
+						</h5>
+						<div class="card-body" style="padding: 2%; font-size: large;">
+							Quantity : <strong><bean:write name="purchaseItems"
+									property="productQuantity" /></strong>
 
-						<%
-							Integer price = (Integer) pageContext.findAttribute("productPrice");
-									Integer quantity = (Integer) pageContext.findAttribute("productQuantity");
-									Integer result = price * quantity;
-									totalPrice += result;
-						%>
-						Total : <strong><%="&#8377; " + result%></strong>
+							<%
+								Integer price = (Integer) pageContext.findAttribute("productPrice");
+											Integer quantity = (Integer) pageContext.findAttribute("productQuantity");
+											Integer result = price * quantity;
+											totalPrice += result;
+							%>
+							Total : <strong><%="&#8377; " + result%></strong>
 
+						</div>
 					</div>
-				</div>
+				</logic:equal>
 			</logic:iterate>
 			<div class="card" style="width: 50%; margin: 2%;">
 

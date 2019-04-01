@@ -19,7 +19,7 @@
 	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
 	crossorigin="anonymous">
 </head>
-<body>
+<body onload="activeTab('cartNav')">
 	<%@ include file="/WEB-INF/jspf/nav.jspf"%>
 	<logic:empty name="cartLists">
 		<div class="card" style="width: 50%; margin: auto;">
@@ -40,6 +40,7 @@
 			property="productQuantity" />
 		<bean:define id="productPrice" name="cartItems"
 			property="productPrice" />
+		<bean:define id="available" name="cartItems" property="isAvailable" />
 		<div class="card" style="width: 70%; margin: 2%;">
 			<h3 class="card-header">
 				<bean:write name="cartItems" property="productName" />
@@ -49,22 +50,27 @@
 			</h3>
 			<div class="card-body"
 				style="padding: 2%; font-size: large; font-weight: bold;">
-				<a href="user.do?method=addToCart&id=${productId}"
-					class="btn btn-success" style="margin: 1%;">+</a>
-				<bean:write name="cartItems" property="productQuantity" />
-				<a
-					href="user.do?method=removeFromCart&id=${productId}&quantity=${productQuantity}"
-					class="btn btn-danger" style="margin: 1%; margin-right: 4%;">-</a>
-				<%
-					Integer price = (Integer) pageContext.findAttribute("productPrice");
-						Integer quantity = (Integer) pageContext.findAttribute("productQuantity");
-						Integer result = price * quantity;
-						totalPrice += result;
-				%>
-				<%="&#8377; " + result%>
-				<a
-					href="user.do?method=removeFromCart&id=${productId}&deleteCart=${productQuantity}"
-					style="float: right;" class="btn btn-danger">Remove</a>
+				<logic:equal name="available" value="true">
+					<a href="user.do?method=addToCart&id=${productId}&page=2"
+						class="btn btn-success" style="margin: 1%;">+</a>
+					<bean:write name="cartItems" property="productQuantity" />
+					<a
+						href="user.do?method=removeFromCart&id=${productId}&quantity=${productQuantity}"
+						class="btn btn-danger" style="margin: 1%; margin-right: 4%;">-</a>
+					<%
+						Integer price = (Integer) pageContext.findAttribute("productPrice");
+								Integer quantity = (Integer) pageContext.findAttribute("productQuantity");
+								Integer result = price * quantity;
+								totalPrice += result;
+					%>
+					<%="&#8377; " + result%>
+					<a
+						href="user.do?method=removeFromCart&id=${productId}&deleteCart=${productQuantity}"
+						style="float: right;" class="btn btn-danger">Remove</a>
+				</logic:equal>
+				<logic:equal name="available" value="false">
+					<a class="btn btn-secondary">Not Available</a>
+				</logic:equal>
 			</div>
 		</div>
 	</logic:iterate>
