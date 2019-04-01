@@ -20,7 +20,7 @@ public class LoginAction extends Action {
 		String username = loginForm.getUsername();
 		if (request.getSession().getAttribute("role") != null) {
 			String page = (String) request.getSession().getAttribute("role");
-			if (page.equals("admin"))
+			if ("admin".equals(page))
 				return mapping.findForward("adminHome");
 			else
 				return mapping.findForward("success");
@@ -35,7 +35,7 @@ public class LoginAction extends Action {
 			session.setAttribute("userId", (Integer)objects[1]);
 			if ((Boolean)objects[0]) {
 				session.setAttribute("role", "admin");
-				return mapping.findForward("adminHome");
+				return mapping.findForward("edit");
 			} else {
 				session.setAttribute("role", "normal");
 				return mapping.findForward("success");

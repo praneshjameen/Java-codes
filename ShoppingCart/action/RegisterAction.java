@@ -23,7 +23,7 @@ public class RegisterAction extends Action {
 		String role = registerForm.getRole();
 		if (request.getSession().getAttribute("role") != null) {
 			String page = (String) request.getSession().getAttribute("role");
-			if (page.equals("admin")) {
+			if ("admin".equals(page)) {
 				return mapping.findForward("adminHome");
 			} else {
 				return mapping.findForward("success");
@@ -38,7 +38,7 @@ public class RegisterAction extends Action {
 			ShoppingCartDA dataAccess = new ShoppingCartDA();
 			Integer userId=dataAccess.register(registerForm);
 			session.setAttribute("userId", userId);
-			if (role.equals("Admin")) {
+			if ("Admin".equals(role)) {
 				session.setAttribute("role", "admin");
 				return mapping.findForward("adminHome");
 			} else {

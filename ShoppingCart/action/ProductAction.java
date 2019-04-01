@@ -19,8 +19,16 @@ public class ProductAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		ShoppingCartDA dataAccess = new ShoppingCartDA();
-		ArrayList<ProductForm> productList = dataAccess.getProduct();
-		request.getSession().setAttribute("productList", productList);
+		Integer userId = (Integer) request.getSession().getAttribute("userId");
+		ArrayList<ProductForm> productList=null;
+		if (userId == null) {
+			productList = dataAccess.getProduct();
+		} else {
+			productList = dataAccess.getProduct(userId);
+			
+		}
+
+		request.setAttribute("productList", productList);
 		return mapping.findForward("success");
 	}
 }

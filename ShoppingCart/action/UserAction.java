@@ -20,13 +20,19 @@ public class UserAction extends DispatchAction {
 			HttpServletResponse response) throws Exception {
 		if (validate(request)) {
 			String id = request.getParameter("id");
-			if (id != null) {
+			String page = request.getParameter("page");
+			if (id != null && page != null) {
 				Integer productId = Integer.parseInt(id);
+				Integer pageNo = Integer.parseInt(page);
 				Integer userId = (Integer) request.getSession().getAttribute("userId");
 				System.out.println("Product Id : " + productId);
 				ShoppingCartDA dataAccess = new ShoppingCartDA();
 				dataAccess.addToWishlist(userId, productId);
-				return mapping.findForward("viewWishlist");
+				if (pageNo == 2) {
+					return mapping.findForward("viewWishlist");
+				} else {
+					return mapping.findForward("products");
+				}
 			} else {
 				return mapping.findForward("success");
 			}
@@ -44,8 +50,7 @@ public class UserAction extends DispatchAction {
 			if (userId != null) {
 				ShoppingCartDA dataAccess = new ShoppingCartDA();
 				ArrayList<ProductForm> wishList = dataAccess.getWishList(userId);
-				request.getSession().setAttribute("wishLists", wishList);
-				// return null;
+				request.setAttribute("wishLists", wishList);
 				return mapping.findForward("wishlist");
 			} else {
 				return mapping.findForward("success");
@@ -62,11 +67,17 @@ public class UserAction extends DispatchAction {
 		if (validate(request)) {
 			Integer userId = (Integer) request.getSession().getAttribute("userId");
 			String id = request.getParameter("id");
-			if (id != null && userId != null) {
+			String page = request.getParameter("page");
+			if (id != null && userId != null && page != null) {
 				Integer productId = Integer.parseInt(id);
+				Integer pageNo = Integer.parseInt(page);
 				ShoppingCartDA dataAccess = new ShoppingCartDA();
 				dataAccess.removeWishList(userId, productId);
-				return mapping.findForward("viewWishlist");
+				if (pageNo == 2) {
+					return mapping.findForward("viewWishlist");
+				} else {
+					return mapping.findForward("products");
+				}
 			} else
 				return mapping.findForward("success");
 		} else {
@@ -79,13 +90,19 @@ public class UserAction extends DispatchAction {
 			HttpServletResponse response) throws Exception {
 		if (validate(request)) {
 			String id = request.getParameter("id");
+			String page = request.getParameter("page");
 			Integer userId = (Integer) request.getSession().getAttribute("userId");
-			Boolean productState = (Boolean) request.getSession().getAttribute("productState");
-			if (id != null && userId != null && productState != null) {
+			Boolean productState = (Boolean) request.getAttribute("productState");
+			if (id != null && userId != null && productState != null && page != null) {
 				Integer productId = Integer.parseInt(id);
+				Integer pageNo = Integer.parseInt(page);
 				ShoppingCartDA dataAccess = new ShoppingCartDA();
 				dataAccess.addToCart(userId, productId, productState);
-				return mapping.findForward("viewCart");
+				if (pageNo == 2) {
+					return mapping.findForward("viewCart");
+				} else {
+					return mapping.findForward("products");
+				}
 			} else {
 				return mapping.findForward("success");
 			}
@@ -131,7 +148,7 @@ public class UserAction extends DispatchAction {
 			if (userId != null) {
 				ShoppingCartDA dataAccess = new ShoppingCartDA();
 				ArrayList<ProductForm> cartLists = dataAccess.getCartList(userId);
-				request.getSession().setAttribute("cartLists", cartLists);
+				request.setAttribute("cartLists", cartLists);
 				return mapping.findForward("cart");
 			} else {
 				return mapping.findForward("success");
@@ -147,20 +164,17 @@ public class UserAction extends DispatchAction {
 		if (validate(request)) {
 			String id = request.getParameter("id");
 			Integer userId = (Integer) request.getSession().getAttribute("userId");
-			if (id != null && userId != null) {
+			Boolean productState = (Boolean) request.getAttribute("productState");
+			if (id != null && userId != null && productState != null) {
 				Integer productId = Integer.parseInt(id);
 				ShoppingCartDA dataAccess = new ShoppingCartDA();
-				Integer flag = dataAccess.checkQuantity(productId, userId);
-				if (flag == 0) {
-					return mapping.findForward("success");
-				} else if (flag == 1) {
+				if (productState == false) {
 					dataAccess.addToCart(userId, productId, false);
-				} else {
-					dataAccess.addToCart(userId, productId, true);
 				}
-				return mapping.findForward("viewPurchase");
-			} else
+				return mapping.findForward("viewCart");
+			} else {
 				return mapping.findForward("success");
+			}
 		} else {
 			return mapping.findForward("success");
 		}
@@ -174,9 +188,9 @@ public class UserAction extends DispatchAction {
 			if (userId != null) {
 				ShoppingCartDA dataAccess = new ShoppingCartDA();
 				ArrayList<ProductForm> purchaseLists = dataAccess.getCartList(userId);
-				request.getSession().setAttribute("purchaseLists", purchaseLists);
+				request.setAttribute("purchaseLists", purchaseLists);
 				ArrayList<UserForm> addressList = dataAccess.getAddressList(userId);
-				request.getSession().setAttribute("addressList", addressList);
+				request.setAttribute("addressList", addressList);
 				return mapping.findForward("purchase");
 			} else {
 				return mapping.findForward("success");
@@ -231,9 +245,9 @@ public class UserAction extends DispatchAction {
 		if (validate(request)) {
 			Integer userId = (Integer) request.getSession().getAttribute("userId");
 			if (userId != null) {
-				ShoppingCartDA dataAccess=new ShoppingCartDA();
-				ArrayList<UserForm> orderLists=dataAccess.getOrderList(userId);
-				request.getSession().setAttribute("orderLists", orderLists);
+				ShoppingCartDA dataAccess = new ShoppingCartDA();
+				ArrayList<UserForm> orderLists = dataAccess.getOrderList(userId);
+				request.setAttribute("orderLists", orderLists);
 				return mapping.findForward("orders");
 			} else {
 				return mapping.findForward("success");
@@ -247,11 +261,15 @@ public class UserAction extends DispatchAction {
 	public ActionForward cancelItem(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		if (validate(request)) {
-			String id = request.getParameter("id");
-			if (id != null) {
-				Integer orderId = Integer.parseInt(id);
-				ShoppingCartDA dataAccess=new ShoppingCartDA();
-				dataAccess.cancelItem(orderId);
+			String id1 = request.getParameter("orderId");
+			String id2 = request.getParameter("productId");
+			String q=request.getParameter("quantity");
+			if (id1 != null && id2 != null && q!=null) {
+				Integer orderId = Integer.parseInt(id1);
+				Integer productId = Integer.parseInt(id2);
+				Integer quantity=Integer.parseInt(q);
+				ShoppingCartDA dataAccess = new ShoppingCartDA();
+				dataAccess.cancelItem(orderId, productId,quantity);
 				return mapping.findForward("viewOrders");
 			} else
 				return mapping.findForward("success");
@@ -264,7 +282,7 @@ public class UserAction extends DispatchAction {
 	public boolean validate(HttpServletRequest request) {
 		if (request.getSession().getAttribute("role") == null)
 			return false;
-		else if (request.getSession().getAttribute("role").equals("admin"))
+		else if ("admin".equals(request.getSession().getAttribute("role")))
 			return false;
 		return true;
 	}

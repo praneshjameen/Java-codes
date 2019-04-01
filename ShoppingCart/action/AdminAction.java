@@ -40,7 +40,7 @@ public class AdminAction extends DispatchAction {
 			if (productForm.getProductName() != null) {
 				ShoppingCartDA dataAccess = new ShoppingCartDA();
 				dataAccess.addProduct(productForm);
-				return mapping.findForward("admin");
+				return mapping.findForward("edit");
 			} else {
 				return mapping.findForward("addProduct");
 			}
@@ -54,7 +54,7 @@ public class AdminAction extends DispatchAction {
 		if (validate(request)) {
 			ShoppingCartDA dataAccess = new ShoppingCartDA();
 			ArrayList<ProductForm> productList = dataAccess.getProduct();
-			request.getSession().setAttribute("productList", productList);
+			request.setAttribute("productList", productList);
 			return mapping.findForward("editProduct");
 		} else
 			return mapping.findForward("success");
@@ -111,12 +111,19 @@ public class AdminAction extends DispatchAction {
 			return mapping.findForward("success");
 
 	}
+//	public ActionForward viewOrderLog(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+//			HttpServletResponse response) throws Exception {
+//		if (validate(request)) {
+//			return mapping.findForward("");
+//		} else
+//			return mapping.findForward("success");
+//	}
 	
 
 	public boolean validate(HttpServletRequest request) {
 		if (request.getSession().getAttribute("role") == null)
 			return false;
-		else if (request.getSession().getAttribute("role").equals("normal"))
+		else if ("normal".equals(request.getSession().getAttribute("role")))
 			return false;
 		return true;
 	}
