@@ -68,10 +68,10 @@ public class RegisterForm extends ActionForm {
 			e.printStackTrace();
 		}
 		if (getRole() != null) {
-			if (getRole().equals("Admin")) {
+			if ("Admin".equals(getRole())) {
 				String key = request.getParameter("adminKey");
 				System.out.println(key + " - key");
-				if (!key.equals("9500159071")) {
+				if (!"9500159071".equals(key)) {
 					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.key"));
 					System.out.println(errors);
 					return errors;

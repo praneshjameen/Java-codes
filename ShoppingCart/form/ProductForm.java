@@ -16,7 +16,10 @@ public class ProductForm extends ActionForm {
 	private Integer productPrice;
 	private Integer productQuantity;
 	private Boolean isAvailable;
-
+	private Boolean wListAvailable;
+	private Boolean cartAvailable;
+	private Integer cartQuantity;
+	private Boolean isCancelled;
 	public Integer getProductId() {
 		return productId;
 	}
@@ -66,6 +69,38 @@ public class ProductForm extends ActionForm {
 	}
 
 	
+
+	public Boolean getwListAvailable() {
+		return wListAvailable;
+	}
+
+	public void setwListAvailable(Boolean wListAvailable) {
+		this.wListAvailable = wListAvailable;
+	}
+
+	public Boolean getCartAvailable() {
+		return cartAvailable;
+	}
+
+	public void setCartAvailable(Boolean cartAvailable) {
+		this.cartAvailable = cartAvailable;
+	}
+
+	public Integer getCartQuantity() {
+		return cartQuantity;
+	}
+
+	public void setCartQuantity(Integer cartQuantity) {
+		this.cartQuantity = cartQuantity;
+	}
+
+	public Boolean getIsCancelled() {
+		return isCancelled;
+	}
+
+	public void setIsCancelled(Boolean isCancelled) {
+		this.isCancelled = isCancelled;
+	}
 
 	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) {
